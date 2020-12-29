@@ -1,8 +1,12 @@
 package cl.ripley.login.controllers;
 
 import cl.ripley.login.entities.LoginRequest;
+import cl.ripley.login.entities.RecoverPasswordRequest;
+import cl.ripley.login.entities.RecoverPasswordResponse;
+import cl.ripley.login.entities.UpdatePasswordRequest;
 import cl.ripley.login.services.LoginService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,10 +19,35 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+    @PostMapping("/create")
+    public HttpStatus create(LoginRequest loginRequest) {
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+        return loginService.create(username, password) ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+    }
+
     @PostMapping("/login")
     public HttpStatus login(LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
         return loginService.validate(username, password) ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+    }
+
+    @PostMapping("/recover-password")
+    public ResponseEntity recoverPassword(RecoverPasswordRequest recoverPasswordRequest) {
+        String username = recoverPasswordRequest.getUsername();
+        String token = loginService.recoverPassword(username);
+        if (token == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        RecoverPasswordResponse response = new RecoverPasswordResponse(token);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/update-password")
+    public HttpStatus updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        String token = updatePasswordRequest.getToken();
+        String newPassword = updatePasswordRequest.getNewPassword();
+        return loginService.updatePassword(token, newPassword) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
     }
 }

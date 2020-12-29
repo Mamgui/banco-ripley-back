@@ -1,9 +1,9 @@
 package cl.ripley.login.entities;
 
-import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.UUID;
 
 @Entity
 public class User {
@@ -13,6 +13,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    private String token;
 
     protected User() {
     }
@@ -20,6 +21,7 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.token = UUID.randomUUID().toString();
     }
 
     @Override
@@ -27,6 +29,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 
@@ -48,5 +51,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

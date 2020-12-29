@@ -8,11 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,23 +23,73 @@ class LoginServiceTest {
     void returnsTrueWhenCredentialsExistsInDatabase() {
         String username = "Ariel";
         String password = "SuperSecret";
-        List<User> users = Arrays.asList(new User(username, password));
-        when(loginRepository.findByUsernameAndPassword(username, password)).thenReturn(users);
+        User user = new User(username, password);
+        when(loginRepository.findByUsernameAndPassword(username, password)).thenReturn(user);
 
-        Boolean result = loginService.validate(username, password);
+        boolean result = loginService.validate(username, password);
 
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
     void returnsFalseWhenCredentialsDoesNotExistsInDatabase() {
         String username = "Joel";
         String password = "SuperSecret";
-        List<User> users = new ArrayList<>();
-        when(loginRepository.findByUsernameAndPassword(username, password)).thenReturn(users);
+        when(loginRepository.findByUsernameAndPassword(username, password)).thenReturn(null);
 
-        Boolean result = loginService.validate(username, password);
+        boolean result = loginService.validate(username, password);
 
-        assertEquals(false, result);
+        assertFalse(result);
+    }
+
+    @Test
+    void returnsTokenWhenUserExistsInDatabase() {
+        String username = "Ariel";
+        String password = "SuperSecret";
+        String token = "123";
+        User user = new User(username, password);
+        user.setToken(token);
+        when(loginRepository.findByUsername(username)).thenReturn(user);
+
+        String result = loginService.recoverPassword(username);
+
+        assertEquals("123", result);
+    }
+
+    @Test
+    void returnsNullWhenUserDoesNotExistsInDatabase() {
+        String username = "Ariel";
+        when(loginRepository.findByUsername(username)).thenReturn(null);
+
+        String result = loginService.recoverPassword(username);
+
+        assertNull(result);
+    }
+
+    @Test
+    void returnsTrueWhenTokenExistsInDatabase() {
+        String token = "123";
+        String newPassword = "newSuperSecret";
+        String username = "Ariel";
+        String password = "SuperSecret";
+        User user = new User(username, password);
+        when(loginRepository.findByToken(token)).thenReturn(user);
+        user.setPassword(newPassword);
+        when(loginRepository.save(user)).thenReturn(user);
+
+        boolean result = loginService.updatePassword(token, newPassword);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void returnsFalseWhenTokenDoesNotExistsInDatabase() {
+        String token = "123";
+        String newPassword = "newSuperSecret";
+        when(loginRepository.findByToken(token)).thenReturn(null);
+
+        boolean result = loginService.updatePassword(token, newPassword);
+
+        assertFalse(result);
     }
 }
