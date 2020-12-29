@@ -1,2 +1,9 @@
+# Project files
+.classpath
+.project
+.settings/
+target/
+
 # IntelliJ files
 .idea
+login.iml
