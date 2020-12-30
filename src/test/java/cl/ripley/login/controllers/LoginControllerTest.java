@@ -32,9 +32,9 @@ class LoginControllerTest {
         LoginRequest loginRequest = new LoginRequest(username, password);
         when(loginService.validate(username, password)).thenReturn(true);
 
-        HttpStatus response = loginController.login(loginRequest);
+        ResponseEntity response = loginController.login(loginRequest);
 
-        assertEquals(200, response.value());
+        assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test
@@ -44,9 +44,9 @@ class LoginControllerTest {
         LoginRequest loginRequest = new LoginRequest(username, password);
         when(loginService.validate(username, password)).thenReturn(false);
 
-        HttpStatus response = loginController.login(loginRequest);
+        ResponseEntity response = loginController.login(loginRequest);
 
-        assertEquals(403, response.value());
+        assertEquals(403, response.getStatusCodeValue());
     }
 
     @Test
@@ -81,9 +81,9 @@ class LoginControllerTest {
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest(token, newPassword);
         when(loginService.updatePassword(token, newPassword)).thenReturn(true);
 
-        HttpStatus response = loginController.updatePassword(updatePasswordRequest);
+        ResponseEntity response = loginController.updatePassword(updatePasswordRequest);
 
-        assertEquals(200, response.value());
+        assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test
@@ -93,8 +93,8 @@ class LoginControllerTest {
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest(token, newPassword);
         when(loginService.updatePassword(token, newPassword)).thenReturn(false);
 
-        HttpStatus response = loginController.updatePassword(updatePasswordRequest);
+        ResponseEntity response = loginController.updatePassword(updatePasswordRequest);
 
-        assertEquals(404, response.value());
+        assertEquals(404, response.getStatusCodeValue());
     }
 }

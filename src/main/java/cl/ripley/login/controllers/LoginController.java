@@ -7,10 +7,13 @@ import cl.ripley.login.entities.UpdatePasswordRequest;
 import cl.ripley.login.services.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class LoginController {
 
     private final LoginService loginService;
@@ -20,21 +23,21 @@ public class LoginController {
     }
 
     @PostMapping("/create")
-    public HttpStatus create(LoginRequest loginRequest) {
+    public ResponseEntity create(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        return loginService.create(username, password) ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        return loginService.create(username, password) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/login")
-    public HttpStatus login(LoginRequest loginRequest) {
+    public ResponseEntity login(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        return loginService.validate(username, password) ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        return loginService.validate(username, password) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/recover-password")
-    public ResponseEntity recoverPassword(RecoverPasswordRequest recoverPasswordRequest) {
+    public ResponseEntity recoverPassword(@RequestBody RecoverPasswordRequest recoverPasswordRequest) {
         String username = recoverPasswordRequest.getUsername();
         String token = loginService.recoverPassword(username);
         if (token == null) {
@@ -45,9 +48,9 @@ public class LoginController {
     }
 
     @PostMapping("/update-password")
-    public HttpStatus updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+    public ResponseEntity updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
         String token = updatePasswordRequest.getToken();
         String newPassword = updatePasswordRequest.getNewPassword();
-        return loginService.updatePassword(token, newPassword) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return loginService.updatePassword(token, newPassword) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }
