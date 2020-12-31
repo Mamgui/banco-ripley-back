@@ -1,4 +1,4 @@
-# banco-ripley-back
+# Project: banco-ripley-back
 Challenge to apply as a Senior Full Stack in Banco Ripley
 
 Problem to solve:
@@ -30,3 +30,12 @@ conocidas de desarrollo y despliegue continuos.
         # npm -v
         6.14.8`
 ```
+
+# Commands
+
+### Locally
+Needs to have Maven installed
+* The first time need to install dependencies: `mvn install`
+* Run this command on the terminal: `mvn spring-boot:run`
+* To run the tests: `mvn test`
+
