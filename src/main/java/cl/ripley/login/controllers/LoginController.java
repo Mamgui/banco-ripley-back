@@ -22,11 +22,11 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity create(@RequestBody LoginRequest loginRequest) {
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        return loginService.create(username, password) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return loginService.register(username, password) ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/login")

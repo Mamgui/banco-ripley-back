@@ -15,9 +15,9 @@ public class LoginService {
         this.loginRepository = loginRepository;
     }
 
-    public boolean create(String username, String password) {
-        User user = loginRepository.save(new User(username, password));
-        return user != null;
+    public boolean register(String username, String password) {
+        loginRepository.save(new User(username, password));
+        return true;
     }
 
     public boolean validate(String username, String password) {
