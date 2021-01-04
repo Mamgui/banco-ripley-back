@@ -37,5 +37,10 @@ conocidas de desarrollo y despliegue continuos.
 Needs to have Maven installed
 * The first time need to install dependencies: `mvn install`
 * Run this command on the terminal: `mvn spring-boot:run`
+  * Call to any endpoint in: `http://localhost:8080/`
 * To run the tests: `mvn test`
 
+### Docker
+* To build the image: `docker build -t ripley-back .`
+* To run the image: `docker run -p 8080:8080 -t ripley-back`
+* Call to any endpoint in: `http://localhost:8080/`
