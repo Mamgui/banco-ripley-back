@@ -56,3 +56,4 @@ Needs to have Maven installed
 * [Lombok](https://projectlombok.org/)
 * [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
 * [H2](https://www.h2database.com/)
+* [Docker](https://www.docker.com/)
